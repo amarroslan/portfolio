@@ -4,6 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AMAR — CS UNDERGRAD</title>
+<meta name="description" content="Amar — CS undergraduate @ UTP. Full-stack tinkerer. ATEEZ × The Neighbourhood on repeat." />
+<meta property="og:title" content="AMAR — CS UNDERGRAD" />
+<meta property="og:description" content="Full-stack tinkerer. ATEEZ × The Neighbourhood on repeat." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://portfolio-lac-tau-86.vercel.app" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90' fill='%23ff1e3c'%3E%E2%97%88%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -34,7 +40,7 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
 
   body {
     background: var(--void);
@@ -342,6 +348,9 @@
     color: transparent; -webkit-text-stroke: 1px rgba(255, 30, 60, 0.25);
     pointer-events: none;
   }
+  @supports not (-webkit-text-stroke: 1px #000) {
+    .project-num { color: rgba(255, 30, 60, 0.2); }
+  }
   .project-status {
     display: inline-block; font-family: var(--font-mono); font-size: 0.65rem;
     letter-spacing: 0.25em; color: var(--red); border: 1px solid var(--red-dim);
@@ -483,11 +492,43 @@
   body.tos-open { overflow: hidden; }
   body.intro-done #tos-overlay { opacity: 0; visibility: hidden; }
 
+  /* ---------------- MOBILE NAV ---------------- */
+  .nav-toggle {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 42px; height: 40px; padding: 9px; background: transparent;
+    border: 1px solid var(--line); cursor: pointer; flex-shrink: 0;
+  }
+  .nav-toggle span {
+    display: block; height: 2px; width: 100%; background: var(--red);
+    box-shadow: 0 0 8px var(--red-glow); transition: transform 0.3s, opacity 0.3s;
+  }
+  body.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  body.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+  body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
   /* ---------------- RESPONSIVE ---------------- */
+  @media (max-width: 1000px) {
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 0.68rem; letter-spacing: 0.12em; }
+    .nav-links a::before { margin-right: 3px; }
+  }
   @media (max-width: 860px) {
     .about-grid, .contact-grid { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
     .hero-name { letter-spacing: 0.03em; }
+    .nav-toggle { display: flex; }
+    .nav-links {
+      position: fixed; top: 68px; left: 0; right: 0;
+      flex-direction: column; gap: 0;
+      background: rgba(5, 5, 7, 0.97);
+      border-bottom: 1px solid var(--line);
+      padding: 0.4rem 0 1.2rem;
+      opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    }
+    body.nav-open .nav-links { opacity: 1; transform: none; visibility: visible; pointer-events: auto; }
+    .nav-links li { width: 100%; }
+    .nav-links a { display: block; padding: 0.9rem 2rem; font-size: 0.85rem; }
+    .nav-links a::after { display: none; }
   }
   @media (max-width: 480px) {
     .nav-status { display: none; }
@@ -535,6 +576,9 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-status"><span class="dot"></span>ONLINE</div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <main>
@@ -949,6 +993,17 @@
     }
     document.querySelectorAll('.nav-links a').forEach(function (a) {
       a.addEventListener('mouseenter', function () { scramble(a); });
+      a.addEventListener('click', function () {
+        document.body.classList.remove('nav-open');
+        if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    /* ---------- Mobile nav toggle ---------- */
+    var navToggle = document.getElementById('nav-toggle');
+    navToggle.addEventListener('click', function () {
+      var open = document.body.classList.toggle('nav-open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
 
     /* ---------- Contact form (placeholder) ---------- */
